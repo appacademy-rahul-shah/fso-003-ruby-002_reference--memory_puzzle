@@ -6,30 +6,36 @@ require_relative('card')
 class Game
   def initialize(board)
     @board = board
+    @previous_guess = nil
   end
 
   def play
     until @board.won?
-      render_board
-      guessed_pos1 = prompt
-      render_board(@board[guessed_pos1])
-      guessed_pos2 = prompt
-      render_board(@board[guessed_pos2])
-      make_guess(@board[guessed_pos1], @board[guessed_pos2])
+      2.times do
+        render_board
+        guessed_pos = prompt
+        render_board(guessed_pos)
+        make_guess(guessed_pos)
+      end
+      @previous_guess = nil
     end
     render_board
     puts 'You win!'
   end
 
-  def make_guess(guess1, guess2)
-    if guess1 == guess2
-      puts "It's a match!"
-      sleep(1.5)
+  def make_guess(pos)
+    if @previous_guess
+      if @board[pos] == @board[@previous_guess]
+        puts "It's a match!"
+        sleep(1)
+      else
+        @board[pos].hide
+        @board[@previous_guess].hide
+        puts 'Try again...'
+        sleep(3)
+      end
     else
-      guess1.hide
-      guess2.hide
-      puts 'Try again...'
-      sleep(3)
+      @previous_guess = pos
     end
   end
 
@@ -39,7 +45,7 @@ class Game
   end
 
   def render_board(guess = nil)
-    guess&.reveal
+    @board[guess].reveal if guess
     system('clear')
     @board.render
   end
