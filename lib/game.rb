@@ -2,19 +2,21 @@
 
 require_relative('board')
 require_relative('card')
+require_relative('player')
 
 class Game
-  def initialize(board)
+  def initialize(board, player)
     @board = board
     @previous_guess = nil
+    @player = player
   end
 
   def play
     until @board.won?
       2.times do
         render_board
-        prompt
-        guessed_pos = input
+        @player.prompt
+        guessed_pos = @player.input
         render_board(guessed_pos)
         make_guess(guessed_pos)
       end
@@ -40,14 +42,6 @@ class Game
     end
   end
 
-  def prompt
-    puts "Enter [row,column] position of the card to flip (e.g. '2,3'):"
-  end
-
-  def input
-    gets.chomp.split(',').map!(&:to_i)
-  end
-
   def render_board(guess = nil)
     @board[guess].reveal if guess
     system('clear')
@@ -56,6 +50,6 @@ class Game
 end
 
 if $PROGRAM_NAME == __FILE__
-  game = Game.new(Board.new)
+  game = Game.new(Board.new, HumanPlayer.new)
   game.play
 end
