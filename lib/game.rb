@@ -50,7 +50,7 @@ class Game
 end
 
 if $PROGRAM_NAME == __FILE__
-  grid_size = 4
-  game = Game.new(Board.new(grid_size), HumanPlayer.new)
+  grid_size = 2
+  game = Game.new(Board.new(grid_size), ComputerPlayer.new(grid_size))
   game.play
 end
