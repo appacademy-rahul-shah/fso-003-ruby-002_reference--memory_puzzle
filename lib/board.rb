@@ -3,8 +3,8 @@
 require_relative('card')
 
 class Board
-  def initialize
-    @grid_size = 2
+  def initialize(grid_size)
+    @grid_size = grid_size
     @grid = Array.new(@grid_size) { Array.new(@grid_size) }
     populate
   end
