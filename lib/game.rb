@@ -13,7 +13,8 @@ class Game
     until @board.won?
       2.times do
         render_board
-        guessed_pos = prompt
+        prompt
+        guessed_pos = input
         render_board(guessed_pos)
         make_guess(guessed_pos)
       end
@@ -41,6 +42,9 @@ class Game
 
   def prompt
     puts "Enter [row,column] position of the card to flip (e.g. '2,3'):"
+  end
+
+  def input
     gets.chomp.split(',').map!(&:to_i)
   end
 
